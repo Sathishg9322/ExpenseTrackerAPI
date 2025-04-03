@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTrackerAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Expense")]
     [ApiController]
     public class ExpenseController : ControllerBase
     {
@@ -14,6 +14,7 @@ namespace ExpenseTrackerAPI.Controllers
             expenseDL = new ExpenseDL(configuration);
         }
 
+        [HttpGet]
         public IActionResult GetDetails() 
         {
             var expenses = expenseDL.GetExpenses();

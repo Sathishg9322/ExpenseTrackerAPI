@@ -1,69 +1,24 @@
-﻿using ExpenseTrackerAPI.Data;
-using ExpenseTrackerAPI.Models;
+﻿using ExpenseTrackerAPI.DataLayer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTrackerAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ExpensesController : ControllerBase
+    public class ExpenseController : ControllerBase
     {
-        private readonly AppDbContext _context;
-
-        public ExpensesController(AppDbContext context)
+        private readonly ExpenseDL expenseDL;
+        public ExpenseController(IConfiguration configuration)
         {
-            _context = context;
+            expenseDL = new ExpenseDL(configuration);
         }
 
-        // GET: api/expenses
-        [HttpGet]
-        public async Task<IActionResult> GetExpenses()
+        public IActionResult GetDetails() 
         {
-            var expense = await _context.Expenses.ToListAsync();
-            return Ok(expense);
+            var expenses = expenseDL.GetExpenses();
+            return Ok(expenses);
         }
 
-
-        // GET: api/expenses/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetExpense(int id)
-        {
-            var expense = await _context.Expenses.FindAsync(id);
-            if (expense == null) return NotFound();
-            return Ok(expense);
-        }
-
-        // POST: api/expenses
-        [HttpPost]
-        public async Task<IActionResult> PostExpense(Expense expense)
-        {
-            _context.Expenses.Add(expense);
-            await _context.SaveChangesAsync();
-            return Ok("Record Inserted");
-        }
-
-        // PUT: api/expenses/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutExpense(int id, Expense expense)
-        {
-            if (id != expense.Id) return BadRequest();
-
-            _context.Entry(expense).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return Ok("Record Updated");
-        }
-
-        // DELETE: api/expenses/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteExpense(int id)
-        {
-            var expense = await _context.Expenses.FindAsync(id);
-            if (expense == null) return NotFound();
-
-            _context.Expenses.Remove(expense);
-            await _context.SaveChangesAsync();
-            return Ok("Record Deleted");
-        }
     }
 }

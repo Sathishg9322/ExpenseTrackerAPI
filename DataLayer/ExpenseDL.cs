@@ -12,7 +12,7 @@ namespace ExpenseTrackerAPI.DataLayer
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
-
+            
         public List<Expense> GetExpenses()
         {
             List<Expense> expenses = new();
